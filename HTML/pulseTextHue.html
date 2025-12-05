@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Color Pulse Glow</title>
+  <style>
+    .panel {
+      width: 319;
+      height: 28px;              /* taller so text fits comfortably */
+      background-color: rgba(0, 0, 0, 0.88); /* black at 88% opacity */
+      display: flex;             /* use flexbox for centering */
+      align-items: center;       /* vertical centering */
+      justify-content: center;   /* horizontal centering */
+    }
+
+    .color-pulse {
+      font-size: 16px;
+      font-family: Calibri, sans-serif;
+      font-weight: bold;
+      animation: colorPulse var(--pulse-speed, 2s) infinite;
+    }
+
+    @keyframes colorPulse {
+      0%   { color: #ff4081; text-shadow: 0 0 10px #ff4081; }
+      25%  { color: #40c4ff; text-shadow: 0 0 20px #40c4ff; }
+      50%  { color: #69f0ae; text-shadow: 0 0 30px #69f0ae; }
+      75%  { color: #ffd740; text-shadow: 0 0 20px #ffd740; }
+      100% { color: #ff4081; text-shadow: 0 0 10px #ff4081; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="panel">
+    <p id="pulseText" class="color-pulse">Default pulsating text</p>
+  </div>
+
+  <script>
+    function setup(htmlComponent) {
+      // Listen for data updates from MATLAB
+      htmlComponent.addEventListener("DataChanged", function() {
+        const data = htmlComponent.Data;
+        if (data) {
+          const el = document.getElementById("pulseText");
+          if (data.message) el.textContent = data.message;
+          if (data.color) el.style.color = data.color;
+          if (data.speed) {
+            // Update CSS variable for pulse speed
+            el.style.setProperty("--pulse-speed", data.speed);
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
