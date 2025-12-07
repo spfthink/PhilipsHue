@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <style>
+    .panel {
+      color: white;
+      font-family: Calibri, sans-serif;
+      font-size: 18px;
+      font-weight: bold;
+      line-height: 1;
+      width: 25px;   /* default width */
+      height: 25px;   /* default height */
+      background-color: rgba(0, 0, 0, 0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .blinker {
+      animation: blinker var(--blink-speed, 1s) infinite;
+    }
+
+    @keyframes blinker {
+      0%   { opacity: 1; }
+      50%  { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div id="panel" class="panel">
+    <p id="blinkText" style="white-space: pre-line;" class="blinker">
+      blinkTextFlexible
+    </p>
+  </div>
+
+  <script>
+    function setup(htmlComponent) {
+      htmlComponent.addEventListener("DataChanged", function() {
+        const data = htmlComponent.Data;
+        if (data) {
+          const el = document.getElementById("blinkText");
+          const panel = document.getElementById("panel");
+
+          if (data.message) el.textContent = data.message;
+          if (data.color) el.style.color = data.color;
+          if (data.fontfamily) el.style.fontFamily = data.fontfamily;
+          if (data.fontsize) el.style.fontSize = data.fontsize;
+          if (data.fontweight) el.style.fontWeight = data.fontweight;
+          if (data.lineheight) el.style.lineHeight = data.lineheight;
+
+          // Apply width/height to the PANEL, not just the text
+          if (data.width) panel.style.width = data.width;   // e.g. "300px"
+          if (data.height) panel.style.height = data.height; // e.g. "50px"
+
+          if (data.speed) {
+            el.style.setProperty("--blink-speed", data.speed);
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
